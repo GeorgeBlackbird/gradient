@@ -24,12 +24,13 @@ export const generateGradient = (): GradientConfig => {
     [0, 60, 120],
     [0, 120, 240],
     [0, 20, 180],
-  ]
+  ] as const
 
-  const offsets = paletteTypes[random(0, paletteTypes.length - 1)]
+  const offsets = paletteTypes[random(0, paletteTypes.length - 1)] ?? paletteTypes[0]
 
   const stops = Array.from({ length: stopCount }, (_, index) => {
-    const hue = baseHue + offsets[index % offsets.length]
+    const offset = offsets[index % offsets.length] ?? 0
+    const hue = baseHue + offset
 
     return {
       id: crypto.randomUUID(),
