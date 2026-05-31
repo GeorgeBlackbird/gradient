@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { css } = useGradient()
+  const { css, generateRandomGradient } = useGradient()
+
+  onKeyStroke('r', () => {
+    generateRandomGradient()
+  })
 </script>
 
 <template>
@@ -9,106 +13,120 @@ const { css } = useGradient()
       background: css,
     }"
   >
-    <div class="gradient-preview__overlay"/>
+    <div class="gradient-preview__overlay" />
 
     <div class="gradient-preview__content">
       <h1>Gradient Generator</h1>
 
-      <p>
-        Generate beautiful gradients
-      </p>
+      <p>Generate beautiful gradients</p>
     </div>
+
+    <button class="random-button" @click="generateRandomGradient">🎲 Random</button>
   </div>
 </template>
 
 <style scoped lang="scss">
-.gradient-preview {
-  position: relative;
-
-  width: 100%;
-  min-height: 100vh;
-
-  overflow: hidden;
-
-  background-size: 200% 200%;
-
-  animation: gradient-flow 12s ease infinite;
-
-  &__overlay {
-    position: absolute;
-    inset: 0;
-
-    background:
-      radial-gradient(
-        circle at top left,
-        rgb(255 255 255 / 0.15),
-        transparent 40%
-      ),
-      radial-gradient(
-        circle at bottom right,
-        rgb(255 255 255 / 0.1),
-        transparent 50%
-      );
-
-    pointer-events: none;
-  }
-
-  &__content {
+  .gradient-preview {
     position: relative;
-    z-index: 1;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+    width: 100%;
     min-height: 100vh;
 
-    text-align: center;
+    overflow: hidden;
 
-    color: white;
+    background-size: 200% 200%;
+
+    animation: gradient-flow 12s ease infinite;
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(circle at top left, rgb(255 255 255 / 0.15), transparent 40%),
+        radial-gradient(circle at bottom right, rgb(255 255 255 / 0.1), transparent 50%);
+
+      pointer-events: none;
+    }
+
+    &__content {
+      position: relative;
+      z-index: 1;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      min-height: 100vh;
+
+      text-align: center;
+
+      color: white;
+    }
+
+    h1 {
+      margin: 0;
+
+      font-size: clamp(3rem, 8vw, 7rem);
+
+      font-weight: 800;
+
+      letter-spacing: -0.04em;
+
+      text-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+    }
+
+    p {
+      margin-top: 1rem;
+
+      font-size: 1.125rem;
+
+      opacity: 0.85;
+    }
+
+    .random-button {
+      position: absolute;
+
+      top: 24px;
+      right: 24px;
+
+      z-index: 10;
+
+      border: none;
+      border-radius: 999px;
+
+      padding: 12px 20px;
+
+      backdrop-filter: blur(20px);
+
+      background: rgb(255 255 255 / 0.15);
+
+      color: white;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .random-button:hover {
+      transform: translateY(-2px);
+
+      background: rgb(255 255 255 / 0.25);
+    }
   }
 
-  h1 {
-    margin: 0;
+  @keyframes gradient-flow {
+    0% {
+      background-position: 0% 50%;
+    }
 
-    font-size: clamp(
-      3rem,
-      8vw,
-      7rem
-    );
+    50% {
+      background-position: 100% 50%;
+    }
 
-    font-weight: 800;
-
-    letter-spacing: -0.04em;
-
-    text-shadow:
-      0 10px 30px rgb(0 0 0 / 0.15);
+    100% {
+      background-position: 0% 50%;
+    }
   }
-
-  p {
-    margin-top: 1rem;
-
-    font-size: 1.125rem;
-
-    opacity: 0.85;
-  }
-}
-
-@keyframes gradient-flow {
-  0% {
-    background-position:
-      0% 50%;
-  }
-
-  50% {
-    background-position:
-      100% 50%;
-  }
-
-  100% {
-    background-position:
-      0% 50%;
-  }
-}
 </style>

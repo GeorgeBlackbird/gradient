@@ -1,7 +1,4 @@
-export type GradientType =
-  | 'linear'
-  | 'radial'
-  | 'conic'
+export type GradientType = 'linear' | 'radial' | 'conic'
 
 export interface GradientStop {
   id: string

@@ -1,8 +1,6 @@
 import { computed } from 'vue'
-import type {
-  GradientConfig,
-  GradientStop,
-} from '~/types/gradient'
+import type { GradientConfig, GradientStop } from '~/types/gradient'
+import { generateGradient } from '~/utils/generateGradient'
 
 const DEFAULT_GRADIENT: GradientConfig = {
   type: 'linear',
@@ -24,24 +22,14 @@ const DEFAULT_GRADIENT: GradientConfig = {
 }
 
 export const useGradient = () => {
-  const gradient = useLocalStorage<GradientConfig>(
-    'gradient',
-    structuredClone(DEFAULT_GRADIENT),
-  )
+  const gradient = useLocalStorage<GradientConfig>('gradient', structuredClone(DEFAULT_GRADIENT))
 
   const sortedStops = computed(() => {
-    return [...gradient.value.stops].sort(
-      (a, b) => a.position - b.position,
-    )
+    return [...gradient.value.stops].sort((a, b) => a.position - b.position)
   })
 
   const stopsCss = computed(() => {
-    return sortedStops.value
-      .map(
-        stop =>
-          `${stop.color} ${stop.position}%`,
-    )
-    .join(', ')
+    return sortedStops.value.map((stop) => `${stop.color} ${stop.position}%`).join(', ')
   })
 
   const css = computed(() => {
@@ -69,10 +57,7 @@ export const useGradient = () => {
     }
   })
 
-  const addStop = (
-    color: string,
-    position: number,
-  ) => {
+  const addStop = (color: string, position: number) => {
     gradient.value.stops.push({
       id: crypto.randomUUID(),
       color,
@@ -81,26 +66,15 @@ export const useGradient = () => {
   }
 
   const removeStop = (id: string) => {
-    if (
-      gradient.value.stops.length <= 2
-    ) {
+    if (gradient.value.stops.length <= 2) {
       return
     }
 
-    gradient.value.stops =
-      gradient.value.stops.filter(
-        stop => stop.id !== id,
-      )
+    gradient.value.stops = gradient.value.stops.filter((stop) => stop.id !== id)
   }
 
-  const updateStop = (
-    id: string,
-    payload: Partial<GradientStop>,
-  ) => {
-    const stop =
-      gradient.value.stops.find(
-        stop => stop.id === id,
-      )
+  const updateStop = (id: string, payload: Partial<GradientStop>) => {
+    const stop = gradient.value.stops.find((stop) => stop.id === id)
 
     if (!stop) {
       return
@@ -109,15 +83,16 @@ export const useGradient = () => {
     Object.assign(stop, payload)
   }
 
-  const updateAngle = (
-    angle: number,
-  ) => {
+  const updateAngle = (angle: number) => {
     gradient.value.angle = angle
   }
 
+  const generateRandomGradient = () => {
+    gradient.value = generateGradient()
+  }
+
   const reset = () => {
-    gradient.value =
-      structuredClone(DEFAULT_GRADIENT)
+    gradient.value = structuredClone(DEFAULT_GRADIENT)
   }
 
   return {
@@ -132,6 +107,8 @@ export const useGradient = () => {
     updateStop,
 
     updateAngle,
+
+    generateRandomGradient,
 
     reset,
   }
