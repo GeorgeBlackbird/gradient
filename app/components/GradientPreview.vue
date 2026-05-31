@@ -13,6 +13,8 @@
       background: css,
     }"
   >
+    <GradientControls />
+
     <div class="gradient-preview__overlay" />
 
     <div class="gradient-preview__content">
@@ -20,8 +22,6 @@
 
       <p>Generate beautiful gradients</p>
     </div>
-
-    <button class="random-button" @click="generateRandomGradient">🎲 Random</button>
   </div>
 </template>
 
@@ -83,36 +83,6 @@
       font-size: 1.125rem;
 
       opacity: 0.85;
-    }
-
-    .random-button {
-      position: absolute;
-
-      top: 24px;
-      right: 24px;
-
-      z-index: 10;
-
-      border: none;
-      border-radius: 999px;
-
-      padding: 12px 20px;
-
-      backdrop-filter: blur(20px);
-
-      background: rgb(255 255 255 / 0.15);
-
-      color: white;
-
-      cursor: pointer;
-
-      transition: 0.2s;
-    }
-
-    .random-button:hover {
-      transform: translateY(-2px);
-
-      background: rgb(255 255 255 / 0.25);
     }
   }
 

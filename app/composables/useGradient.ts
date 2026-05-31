@@ -57,6 +57,10 @@ export const useGradient = () => {
     }
   })
 
+  const cssDeclaration = computed(() => {
+    return `background: ${css.value};`
+  })
+
   const addStop = (color: string, position: number) => {
     gradient.value.stops.push({
       id: crypto.randomUUID(),
@@ -101,6 +105,7 @@ export const useGradient = () => {
     sortedStops,
 
     css,
+    cssDeclaration,
 
     addStop,
     removeStop,
