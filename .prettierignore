@@ -1,0 +1,11 @@
+.nuxt
+.output
+dist
+node_modules
+coverage
+*.log
+
+public/
+
+.nuxt/*
+nuxt.d.ts

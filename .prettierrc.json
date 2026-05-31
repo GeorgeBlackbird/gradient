@@ -1,0 +1,30 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "endOfLine": "lf",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "singleAttributePerLine": false,
+  "htmlWhitespaceSensitivity": "ignore",
+  "vueIndentScriptAndStyle": true,
+  "plugins": ["prettier-plugin-packagejson"],
+  "overrides": [
+    {
+      "files": "*.scss",
+      "options": {
+        "parser": "scss",
+        "singleQuote": false
+      }
+    },
+    {
+      "files": ["*.ts", "*.mts"],
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}
