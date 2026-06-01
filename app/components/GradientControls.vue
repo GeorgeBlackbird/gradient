@@ -1,23 +1,23 @@
 <script setup lang="ts">
-const {
-  cssDeclaration,
-  generateRandomGradient,
-  saveToFavorites,
-  isFavorite,
-} = useGradient()
+  const gradientService = useGradient()
+const { canUndo, canRedo, isFavorite } = gradientService
 
 const { copy, copied } = useClipboard()
 
 const copyCss = async () => {
-  await copy(cssDeclaration.value)
+  await copy(gradientService.cssDeclaration.value)
 }
 </script>
 
 <template>
   <div class="gradient-controls">
+    <button class="gradient-controls__button" :disabled="!canUndo" @click="gradientService.undo">↶ Undo</button>
+
+    <button class="gradient-controls__button" :disabled="!canRedo" @click="gradientService.redo">↷ Redo</button>
+
     <button
       class="gradient-controls__button"
-      @click="generateRandomGradient"
+      @click="gradientService.generateRandomGradient"
     >
       🎲 Random
     </button>
@@ -32,7 +32,7 @@ const copyCss = async () => {
     <button
       class="gradient-controls__button"
       :disabled="isFavorite"
-      @click="saveToFavorites"
+      @click="gradientService.saveToFavorites"
     >
       {{ isFavorite
           ? '❤️ Saved'
@@ -92,5 +92,13 @@ const copyCss = async () => {
 
 .gradient-controls__button:active {
   transform: translateY(0);
+}
+
+.gradient-controls__button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+
+  transform: none;
 }
 </style>

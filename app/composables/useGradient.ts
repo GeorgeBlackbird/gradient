@@ -23,43 +23,79 @@ const DEFAULT_GRADIENT: GradientConfig = {
 }
 
 export const useGradient = () => {
-  const gradient = useState<GradientConfig>('current-gradient', () =>
-    structuredClone(DEFAULT_GRADIENT),
+  const gradient = useState<GradientConfig>('current-gradient', () => {
+    if (typeof window !== 'undefined') {
+      const localGradient = localStorage.getItem('gradient')
+      if (localGradient) {
+        try {
+          return JSON.parse(localGradient)
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    }
+    return structuredClone(DEFAULT_GRADIENT)
+  })
+
+  const favorites = useState<SavedGradient[]>('gradient-favorites', () => {
+    if (typeof window !== 'undefined') {
+      const localFavorites = localStorage.getItem('gradient-favorites')
+      if (localFavorites) {
+        try {
+          return JSON.parse(localFavorites)
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    }
+    return []
+  })
+
+  const {
+    history,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    clear,
+  } = useRefHistory(
+    gradient,
+    {
+      deep: true,
+      capacity: 50,
+    },
   )
-  const favorites = useState<SavedGradient[]>('gradient-favorites', () => [])
 
-  onMounted(() => {
-    const localGradient = localStorage.getItem('gradient')
-    if (localGradient) {
-      try {
-        gradient.value = JSON.parse(localGradient)
-      } catch (e) {
-        console.error('Error parsing gradient from localStorage', e)
-      }
+  onKeyStroke(['z', 'Z'], (event) => {
+    if (!event.metaKey && !event.ctrlKey) {
+      return
     }
 
-    const localFavorites = localStorage.getItem('gradient-favorites')
-    if (localFavorites) {
-      try {
-        favorites.value = JSON.parse(localFavorites)
-      } catch (e) {
-        console.error('Error parsing gradient favorites from localStorage', e)
-      }
+    event.preventDefault()
+
+    undo()
+  })
+
+  onKeyStroke(['y', 'Y'], (event) => {
+    if (!event.metaKey && !event.ctrlKey) {
+      return
     }
 
-    watch(
-      gradient,
-      (newVal) => {
-        localStorage.setItem('gradient', JSON.stringify(newVal))
-      },
-      { deep: true },
-    )
+    event.preventDefault()
+
+    redo()
+  })
+
+  onMounted(async () => {
+    await nextTick()
+    clear()
+    watch(gradient, (newVal) => localStorage.setItem('gradient', JSON.stringify(newVal)), {
+      deep: true,
+    })
 
     watch(
       favorites,
-      (newVal) => {
-        localStorage.setItem('gradient-favorites', JSON.stringify(newVal))
-      },
+      (newVal) => localStorage.setItem('gradient-favorites', JSON.stringify(newVal)),
       { deep: true },
     )
   })
@@ -172,6 +208,12 @@ export const useGradient = () => {
     removeFavorite,
     applyFavorite,
     isFavorite,
+
+    history,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
 
     reset,
   }
