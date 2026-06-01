@@ -22,6 +22,8 @@
 
       <p>Generate beautiful gradients</p>
     </div>
+
+    <FavoriteGradients />
   </div>
 </template>
 

@@ -2,6 +2,8 @@
 const {
   cssDeclaration,
   generateRandomGradient,
+  saveToFavorites,
+  isFavorite,
 } = useGradient()
 
 const { copy, copied } = useClipboard()
@@ -25,6 +27,16 @@ const copyCss = async () => {
       @click="copyCss"
     >
       {{ copied ? '✅ Copied' : '📋 Copy CSS' }}
+    </button>
+
+    <button
+      class="gradient-controls__button"
+      :disabled="isFavorite"
+      @click="saveToFavorites"
+    >
+      {{ isFavorite
+          ? '❤️ Saved'
+          : '🤍 Favorite' }}
     </button>
   </div>
 </template>

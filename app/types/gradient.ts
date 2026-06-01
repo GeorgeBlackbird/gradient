@@ -26,3 +26,11 @@ export interface GradientConfig {
 
   stops: GradientStop[]
 }
+
+export interface SavedGradient {
+  id: string
+
+  createdAt: string
+
+  gradient: GradientConfig
+}
