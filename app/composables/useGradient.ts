@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, toRaw } from 'vue'
 import type { GradientConfig, GradientStop, SavedGradient } from '~/types/gradient'
 import { generateGradient } from '~/utils/generateGradient'
 import { createGradientCss } from '~/utils/gradient'
@@ -113,7 +113,7 @@ export const useGradient = () => {
   }
 
   const cloneGradient = (gradient: GradientConfig): GradientConfig => {
-    return structuredClone(gradient)
+    return structuredClone(toRaw(gradient))
   }
 
   const MAX_FAVORITES = 50
